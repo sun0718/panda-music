@@ -1,14 +1,14 @@
 <template>
-  <div class="rank" ref="rank">
+  <div class="rank" ref="ranks">
     <scroll :data="topList" class="toplist" ref="toplist">
       <ul>
-        <li @click="selectItem(item)" class="item" v-for="item in topList">
+        <li @click="selectItem(items )" class="item" v-for="(items,indexs) in topList" :key="indexs">
           <div class="icon">
-            <img width="100" height="100" v-lazy="item.picUrl"/>
+            <img width="100" height="100" v-lazy="items.picUrl">
           </div>
           <ul class="songlist">
-            <li class="song" v-for="(song,index) in item.songList">
-              <span>{{index + 1}}</span>
+            <li class="song" v-for="(song,index) in items.songList" :key="index">
+              <span>{{index + 1}}&emsp;</span>
               <span>{{song.songname}}-{{song.singername}}</span>
             </li>
           </ul>
@@ -22,82 +22,89 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
+import Scroll from "@/components/common/scroll/Scroll";
+import Loading from "@/components/common/loading/Loading";
+import { getTopList } from "@/api/rank";
+import { playlistMixin } from "@/assets/js/mixin.js";
+import { mapMutations } from "vuex";
+import { debug } from "util";
 
-  export default {
-    mixins: [playlistMixin],
-    created() {
-      this._getTopList()
+export default {
+  mixins: [playlistMixin],
+  created() {
+    this._getTopList();
+    console.log(111)
+  },
+  data() {
+    return {
+      topList: []
+    };
+  },
+  methods: {
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? "60px" : "";
+      this.$refs.ranks.style.bottom = bottom;
+      this.$refs.toplist.refresh();
     },
-    data() {
-      return {
-        topList: []
-      }
+    selectItem(item) {
+      this.$router.push({
+        path: `/rank/${item.id}`
+      });
+      this.setTopList(item);
     },
-    methods: {
-      handlePlaylist(playlist) {
-        const bottom = playlist.length > 0 ? '60px' : ''
-
-        this.$refs.rank.style.bottom = bottom
-        this.$refs.toplist.refresh()
-      },
-      selectItem(item) {
-        this.$router.push({
-          path: `/rank/${item.id}`
-        })
-        this.setTopList(item)
-      },
-      _getTopList() {
-        getTopList().then((res) => {
-          if (res.code === ERR_OK) {
-            this.topList = res.data.topList
-          }
-        })
-      },
-      ...mapMutations({
-        setTopList: 'SET_TOP_LIST'
-      })
+    _getTopList() {
+      var _that = this;
+      getTopList().then(res => {
+        if (res.code === 0) {
+          _that.topList = res.data.topList;
+        }
+      });
     },
-    watch: {
-      topList() {
-        setTimeout(() => {
-          this.$Lazyload.lazyLoadHandler()
-        }, 20)
-      }
-    },
-    components: {
-      Scroll,
-      Loading
+    ...mapMutations({
+      setTopList: "SET_TOP_LIST"
+    })
+  },
+  watch: {
+    topList() {
+      setTimeout(() => {
+        this.$Lazyload.lazyLoadHandler();
+      }, 20);
     }
+  },
+  components: {
+    Scroll,
+    Loading
   }
+};
 </script>
 
 <style scoped lang="scss">
-  @import "@/assets/styles/variable.scss";
-  @import "@/assets/styles/mixin.scss";
+@import "@/assets/styles/variable.scss";
+@import "@/assets/styles/mixin.scss";
 
-.rank{
+.rank {
   position: fixed;
   width: 100%;
   top: 88px;
   bottom: 0;
-  .toplist{
+  .toplist {
     height: 100%;
     overflow: hidden;
-    .item{
+    .item {
       display: flex;
       margin: 0 20px;
       padding-top: 20px;
       height: 100px;
-      &:last-child{
-        padding-bottom: 20px
+      &:last-child {
+        padding-bottom: 20px;
       }
-      .icon{
+      .icon {
         flex: 0 0 100px;
         width: 100px;
-        height: 100px
+        height: 100px;
       }
-      .songlist{
+      .songlist {
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -108,18 +115,22 @@
         background: $color-highlight-background;
         color: $color-text-d;
         font-size: $font-size-small;
-        .song{
+        text-align: left;
+        .song {
           // no-wrap()
           line-height: 26px;
+          overflow: hidden;
+          white-space:nowrap;
+          text-overflow: ellipsis;
         }
       }
     }
-    .loading-container{
+    .loading-container {
       position: absolute;
       width: 100%;
       top: 50%;
       transform: translateY(-50%);
-      }
+    }
   }
 }
 </style>

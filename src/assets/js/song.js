@@ -1,8 +1,8 @@
-import {getLyric} from '@/api/song.js'
+import {getSongLyric} from '@/api/song.js'
 import {Base64} from 'js-base64'
 
 export default class Song {
-  constructor({id, mid, singer, name, album, duration, image, url}) {
+  constructor({id, mid, singer, name, album, duration, image, url ,urlOther}) {
     this.id = id
     this.mid = mid
     this.singer = singer
@@ -11,15 +11,15 @@ export default class Song {
     this.duration = duration
     this.image = image
     this.url = url
+    this.urlOther = urlOther
   }
 
-  getLyric() {
+  getLyric () {
     if (this.lyric) {
       return Promise.resolve(this.lyric)
     }
-
     return new Promise((resolve, reject) => {
-      getLyric(this.mid).then((res) => {
+      getSongLyric(this.mid).then((res) => {
         if (res.retcode === 0) {
           this.lyric = Base64.decode(res.lyric)
           resolve(this.lyric)
@@ -31,19 +31,6 @@ export default class Song {
   }
 }
 
-export function createSong(musicData) {
-  return new Song({
-    id: musicData.songid,
-    mid: musicData.songmid,
-    singer: filterSinger(musicData.singer),
-    name: musicData.songname,
-    album: musicData.albumname,
-    duration: musicData.interval,
-    image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
-    // url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`,
-    url: `http://110.52.197.21/amobile.music.tc.qq.com/C400${musicData.strMediaMid}.m4a?guid=7466365040&vkey=83756EACC5BD86259773ED8E4053666D25619DCFC7E1C39EF85230BA3072C8AA3818679072E8B76E6271CAAD216CCF88C276624AFA9FAD09&uin=0&fromtag=38`
-  })
-}
 
 function filterSinger(singer) {
   let ret = []
@@ -55,4 +42,18 @@ function filterSinger(singer) {
   })
   return ret.join('/')
 }
+
+export function createSong(musicData,vkey) {
+  return new Song({
+    id: musicData.songid,
+    mid: musicData.songmid,
+    singer: filterSinger(musicData.singer),
+    name: musicData.songname,
+    album: musicData.albumname,
+    duration: musicData.interval,
+    image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
+    urlOther: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}.m4a?fromtag=38&guid=5931742855&vkey=${vkey}`
+  })
+}
+
 

@@ -3,7 +3,7 @@
 > Vue.js 音乐播放器
 
 ## 项目介绍
-1 本项目是仿的QQ音乐，所有接口为QQ音乐的网页版接口，相当于完整版的手机WEB版QQ音乐（QQ音乐官网好多歌是必须要登陆或者下载客户端的）
+1 本项目是仿的QQ音乐，所有接口为QQ音乐的网页版接口，相当于完整版的手机WEB版QQ音乐（QQ音乐官网好多歌是必须要登陆或者下载客户端的）       
 2 技术栈是vue-cli 3.0、使用的预处理语言是scss,项目有使用vue-x做全局的数据管理，没有使用eventBus
 
 ## 项目结构
@@ -73,7 +73,7 @@
 │   │   │   └── MusicList.vue
 │   │   ├── player
 │   │   │   └── Player.vue
-│   │   ├── playlist
+│   │   ├── play-list
 │   │   │   └── Playlist.vue
 │   │   ├── rank
 │   │   │   └── Rank.vue
@@ -151,5 +151,4 @@ npm install
 npm run serve //服务端运行 访问 http://localhost:8080
 
 npm run build 项目打包 
-
 

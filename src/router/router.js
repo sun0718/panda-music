@@ -26,11 +26,23 @@ export default new Router({
     }, 
     {
       path: "/recommend",
-      component: () => import('@/views/Recommend.vue')
+      component: () => import('@/views/Recommend.vue'),
+      children:[
+        {
+          path:':id',
+          component: () => import('@/components/disc/Disc.vue')
+        }
+      ]
     },
     {
       path: "/rank",
-      component: () => import('@/views/Rank.vue')
+      component: () => import('@/views/Rank.vue'),
+      children:[
+        {
+          path:':id',
+          component: () => import('@/components/top-list/TopList.vue')
+        }
+      ]
     },
     {
       path: "/search",

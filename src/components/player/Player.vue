@@ -106,13 +106,12 @@
     <playlist ref="playlist"></playlist>
     <audio
       ref="audio"
-      :src="currentSong.url"
+      :src="currentSong.urlOther"
       @play="ready"
       @error="error"
       @timeupdate="updateTime"
       @ended="end"
     ></audio>
-    <span>{{currentSong.url}}</span>
   </div>
 </template>
 
@@ -126,7 +125,7 @@ import { playMode } from "@/assets/js/config";
 import Lyric from "lyric-parser";
 import Scroll from "@/components/common/scroll/Scroll";
 import { playerMixin } from "@/assets/js/mixin";
-import Playlist from "@/components/playlist/Playlist";
+import Playlist from "@/components/play-list/Playlist";
 
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
@@ -336,9 +335,7 @@ export default {
       }
     },
     getLyric() {
-      this.currentSong
-        .getLyric()
-        .then(lyric => {
+      this.currentSong.getLyric().then(lyric => {
           if (this.currentSong.lyric !== lyric) {
             return;
           }
@@ -441,7 +438,7 @@ export default {
   },
   watch: {
     currentSong(newSong, oldSong) {
-      console.log(newSong);
+      var self = this
       if (!newSong.id) {
         return;
       }
@@ -456,8 +453,8 @@ export default {
       }
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        this.$refs.audio.play();
-        this.getLyric();
+        self.$refs.audio.play();
+        self.getLyric();
       }, 1000);
     },
     playing(newPlaying) {

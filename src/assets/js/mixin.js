@@ -9,7 +9,7 @@ export const playlistMixin = {
     ])
   },
   mounted() {
-    this.handlePlaylist(this.playlist)
+      this.handlePlaylist(this.playlist)
   },
   activated() {
     this.handlePlaylist(this.playlist)

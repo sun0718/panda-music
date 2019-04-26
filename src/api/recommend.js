@@ -15,7 +15,6 @@ export function getRcommend() {
     return jsonp(url, data, options)
 }
 
-
 export function getDiscList() {
     const url = '/api/getDiscList'
     const data = Object.assign({}, commonParams, {
@@ -28,6 +27,31 @@ export function getDiscList() {
       categoryId: 10000000,
       rnd: Math.random(),
       format: 'json'
+    })
+    return axios.get(url, {
+      params: data
+    }).then((res) => {
+      return Promise.resolve(res.data)
+    })
+  }
+export function getDiscSongList(discId) {
+    const url = '/api/getDiscSongList'
+    const data = Object.assign({}, commonParams, {
+      type: 1,
+      json: 1,
+      utf8: 1,
+      onlysong: 0,
+      new_format: 1,
+      disstid: discId,
+      g_tk: 5381,
+      loginUin: 1152921504691894915,
+      hostUin: 0,
+      format: 'json',
+      inCharset: 'utf8',
+      outCharset: 'utf-8',
+      notice: 0,
+      platform: 'yqq.json',
+      needNewCode: 0
     })
     return axios.get(url, {
       params: data

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { getRcommend, getDiscList } from "@/api/recommend.js";
+import { getRcommend , getDiscList } from "@/api/recommend.js";
 import Slider from "@/components/common/slider/Slider.vue";
 import Loading from '@/components/common/loading/Loading.vue';
 import Scroll from '@/components/common/scroll/Scroll.vue';

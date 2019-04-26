@@ -11,7 +11,7 @@
 
 <script>
 import MusicHeader from "@/components/music-header/MusicHeader"
-import Tab from "@/components/tabs/tab"
+import Tab from "@/components/tabs/Tab"
 import Player from '@/components/player/Player'
 export default {
   name:'',
