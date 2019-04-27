@@ -9,7 +9,7 @@
           <div class="hot-key">
             <h1 class="title">热门搜索</h1>
             <ul>
-              <li @click="addQuery(item.k)" class="item" v-for="item in hotKey">
+              <li @click="addQuery(item.k)" class="item" v-for="(item,index) in hotKey" :key="index">
                 <span>{{item.k}}</span>
               </li>
             </ul>
@@ -33,6 +33,74 @@
     <router-view></router-view>
   </div>
 </template>
+
+<script>
+  import SearchBox from '@/components/common/search-box/SearchBox'
+  import SearchList from '@/components/common/search-list/SearchList'
+  import Scroll from '@/components/common/scroll/Scroll'
+  import Confirm from '@/components/common/confirm/Confirm'
+  import Suggest from '@/components/suggest/Suggest'
+  import {getHotKey} from '@/api/search'
+  import {playlistMixin, searchMixin} from '@/assets/js/mixin'
+  import {mapActions} from 'vuex'
+
+  export default {
+    mixins: [playlistMixin, searchMixin],
+    data() {
+      return {
+        hotKey: []
+      }
+    },
+    computed: {
+      shortcut() {
+        return this.hotKey.concat(this.searchHistory)
+      }
+    },
+    created() {
+      this._getHotKey()
+    },
+    methods: {
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '60px' : ''
+
+        this.$refs.searchResult.style.bottom = bottom
+        this.$refs.suggest.refresh()
+
+        this.$refs.shortcutWrapper.style.bottom = bottom
+        this.$refs.shortcut.refresh()
+      },
+      showConfirm() {
+        this.$refs.confirm.show()
+      },
+      _getHotKey() {
+        getHotKey().then((res) => {
+          if (res.code === 0) {
+            this.hotKey = res.data.hotkey.slice(0, 10)
+          }
+        })
+      },
+      ...mapActions([
+        'clearSearchHistory'
+      ])
+    },
+    watch: {
+      query(newQuery) {
+        if (!newQuery) {
+          setTimeout(() => {
+            this.$refs.shortcut.refresh()
+          }, 20)
+        }
+      }
+    },
+    components: {
+      SearchBox,
+      SearchList,
+      Scroll,
+      Confirm,
+      Suggest
+    }
+  }
+</script>
 
 <style lang="scss" >
   @import "@/assets/styles/variable.scss";

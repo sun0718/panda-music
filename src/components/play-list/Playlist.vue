@@ -40,7 +40,7 @@
   </transition>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import {mapActions} from 'vuex'
   import {playMode} from '@/assets/js/config'
   import Scroll from '@/components/common/scroll/Scroll'
@@ -156,7 +156,6 @@
         transform: translate3d(0, 100%, 0);
       }
     }
-    &.list-fade-enter
     .list-wrapper{
       position: absolute;
       left: 0;

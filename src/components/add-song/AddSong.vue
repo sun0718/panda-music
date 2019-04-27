@@ -47,7 +47,7 @@
   import Scroll from '@/components/common/scroll/Scroll'
   import Switches from '@/components/common/switches/Switches'
   import TopTip from '@/components/common/top-tip/TopTip'
-  import Suggest from '@/views/Suggest'
+  import Suggest from '@//components/suggest/Suggest'
   import {searchMixin} from '@/assets/js/mixin.js'
   import {mapGetters, mapActions} from 'vuex'
   import Song from '@/assets/js/song'

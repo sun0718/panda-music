@@ -46,7 +46,17 @@ export default new Router({
     },
     {
       path: "/search",
-      component: () => import('@/views/Search.vue')
+      component: () => import('@/views/Search.vue'),
+      children:[
+        {
+          path:':id',
+          component: () => import('@/views/SingerDetail.vue')
+        }
+      ]
+    },
+    {
+      path: "/user",
+      component: () => import('@/views/UserCenter.vue')
     }
   ]
 })

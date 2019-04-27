@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {jsonp} from '@/assets/js/jsonp'
 import { commonParams , options } from './config'
+import { async } from 'q';
 
 export function getSongLyric(mid) {
   const url = '/api/lyric'
